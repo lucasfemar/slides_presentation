@@ -7,25 +7,30 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
+    "prisma:push": "dotenv -e .env.development -- npx prisma db push",
+    "prisma:studio": "dotenv -e .env.development -- npx prisma studio",
     "services:up": "docker compose -f infra/compose.yaml up -d",
     "services:stop": "docker compose -f infra/compose.yaml stop",
     "services:down": "docker compose -f infra/compose.yaml down"
   },
   "dependencies": {
+    "@prisma/client": "^5.21.1",
+    "dotenv-cli": "^7.4.2",
     "next": "14.2.14",
-    "pg": "^8.13.0",
     "react": "^18",
-    "react-dom": "^18"
+    "react-dom": "^18",
+    "dotenv": "^16.4.5",
+    "dotenv-expand": "^11.0.6"
   },
   "devDependencies": {
     "@types/node": "^20",
-    "@types/pg": "^8.11.10",
     "@types/react": "^18",
     "@types/react-dom": "^18",
     "eslint": "^8",
     "eslint-config-next": "14.2.14",
     "eslint-config-prettier": "^9.1.0",
     "prettier": "^3.3.3",
+    "prisma": "^5.21.1",
     "typescript": "^5"
   }
 }
