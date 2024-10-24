@@ -1,75 +1,113 @@
-/* styles/Login.module.css */
+/* Reseta as margens e o padding de todos os elementos */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box; /* Inclui padding e border na largura e altura total */
+}
+
+/* Definição das variáveis de cor */
+:root {
+  --color-background: #f0f4f8; /* Cor de fundo do container */
+  --color-background-gradient: #e0eafc; /* Cor do gradiente de fundo */
+  --color-card: white; /* Cor de fundo do card */
+  --color-title: #0F62AC; /* Cor do texto do título */
+  --color-button: #893487; /* Cor de fundo do botão */
+  --color-button-hover: #0F62AC; /* Cor do botão ao passar o mouse */
+  --color-text: #555; /* Cor do texto */
+  --color-link: #0056b3; /* Cor do link */
+}
+
+/* Container principal */
 .container {
   display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 98vh;
-  background: linear-gradient(to right, #f0f4f8, #e0eafc);
-  font-family: 'Arial', sans-serif;
+  flex-direction: column; /* Organiza os elementos verticalmente */
+  justify-content: center; /* Centraliza verticalmente */
+  align-items: center; /* Centraliza horizontalmente */
+  height: 98vh; /* Altura da viewport */
+  background: linear-gradient(to right, var(--color-background), var(--color-background-gradient)); /* Gradiente de fundo */
+  font-family: 'Arial', sans-serif; /* Fonte do texto */
 }
 
+/* Card de login/cadastro */
 .card {
-  background-color: white;
-  padding: 2rem;
-  border-radius: 12px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  width: 100%;
-  max-width: 400px;
-  text-align: center;
+  background-color: var(--color-card); /* Cor de fundo do card */
+  padding: 2rem; /* Espaçamento interno */
+  border-radius: 12px; /* Bordas arredondadas */
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2); /* Sombra do card */
+  width: 100%; /* Largura total */
+  max-width: 400px; /* Largura máxima */
+  text-align: center; /* Alinhamento do texto */
+  margin-top: 20px; /* Espaçamento negativo para sobrepor ao logo */
 }
 
+/* Container para o logo */
 .logoContainer {
   display: flex;
-  justify-content: center;
-  margin-bottom: 1rem;
+  justify-content: center; /* Centraliza o logo horizontalmente */
+  margin-bottom: 1rem; /* Espaçamento abaixo do logo */
 }
 
+/* Estilo do título */
 h1 {
-  margin-bottom: 1rem;
-  color: #0F62AC;
+  margin-bottom: 1rem; /* Espaçamento abaixo do título */
+  color: var(--color-title); /* Cor do texto */
 }
 
+/* Estilo do formulário */
 .form {
   display: flex;
-  flex-direction: column;
+  flex-direction: column; /* Organiza os campos do formulário verticalmente */
 }
 
+/* Estilo dos inputs */
 .input {
-  margin-bottom: 1rem;
-  padding: 0.75rem;
-  border: 1px solid #ccc;
-  border-radius: 8px;
-  font-size: 1rem;
+  margin-bottom: 1rem; /* Espaçamento abaixo de cada input */
+  padding: 0.75rem; /* Espaçamento interno */
+  border: 1px solid #ccc; /* Borda do input */
+  border-radius: 8px; /* Bordas arredondadas */
+  font-size: 1rem; /* Tamanho da fonte */
 }
 
+/* Estilo do botão */
 .button {
-  background-color: #893487;
-  color: white;
-  border: none;
-  padding: 0.75rem;
-  border-radius: 8px;
-  font-size: 1rem;
-  cursor: pointer;
-  transition: background-color 0.3s;
+  background-color: var(--color-button); /* Cor de fundo do botão */
+  color: white; /* Cor do texto do botão */
+  border: none; /* Remove bordas */
+  padding: 0.75rem; /* Espaçamento interno do botão */
+  border-radius: 8px; /* Bordas arredondadas */
+  font-size: 1rem; /* Tamanho da fonte do botão */
+  cursor: pointer; /* Muda o cursor ao passar sobre o botão */
+  transition: background-color 0.3s; /* Transição suave para a cor de fundo */
 }
 
+/* Efeito hover para o botão */
 .button:hover {
-  background-color: #0F62AC;
+  background-color: var(--color-button-hover); /* Cor do botão ao passar o mouse */
 }
 
+/* Texto de troca de contas */
 .switchText {
-  margin-top: 1rem;
-  font-size: 0.9rem;
-  color: #555;
+  margin-top: 1rem; /* Espaçamento acima do texto de troca */
+  font-size: 0.9rem; /* Tamanho da fonte */
+  color: var(--color-text); /* Cor do texto */
 }
 
+/* Link de troca de contas */
 .switchLink {
-  color: #0056b3;
-  cursor: pointer;
-  font-weight: bold;
-  margin-left: 0.25rem;
+  color: var(--color-link); /* Cor do link */
+  cursor: pointer; /* Muda o cursor ao passar sobre o link */
+  font-weight: bold; /* Negrito */
+  margin-left: 0.25rem; /* Espaçamento à esquerda do link */
 }
 
+/* Efeito hover para o link de troca */
 .switchLink:hover {
-  text-decoration: underline;
+  text-decoration: underline; /* Sublinha ao passar o mouse */
+}
+
+/* Estilo do logo */
+.logo {
+  width: 250px; /* Largura da imagem */
+  height: auto; /* Mantém a proporção da altura */
+  object-fit: contain; /* Mantém a proporção da imagem */
 }
