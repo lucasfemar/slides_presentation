@@ -1,0 +1,167 @@
+/* Reseta margens e padding */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box; /* Inclui padding e border na largura total */
+}
+
+/* Variáveis de cor */
+:root {
+  --color-background: #f0f4f8;
+  --color-background-gradient: #e0eafc;
+  --color-card: white;
+  --color-title: #0F62AC;
+  --color-button: #893487;
+  --color-button-hover: #0F62AC;
+  --color-text: #555;
+  --color-link: #0056b3;
+}
+
+/* Container principal */
+.container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  background: linear-gradient(to right, var(--color-background), var(--color-background-gradient));
+  font-family: 'Arial', sans-serif;
+  padding: 1rem; /* Adiciona padding para telas menores */
+}
+
+/* Card de login/cadastro */
+.card {
+  background-color: var(--color-card);
+  padding: 2rem;
+  border-radius: 12px;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+  width: 100%;
+  max-width: 400px;
+  text-align: center;
+  margin-top: 20px;
+  transition: transform 0.2s; /* Animação leve ao redimensionar */
+}
+
+/* Animação para 4K */
+@media (min-width: 3840px) {
+  .card {
+    transform: scale(1.2); /* Aumenta o tamanho para TVs 4K */
+  }
+}
+
+/* Container do logo */
+.logoContainer {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 1rem;
+}
+
+/* Estilo do logo */
+.logo {
+  width: 250px;
+  height: auto;
+  object-fit: contain;
+}
+
+/* Estilo do título */
+h1 {
+  margin-bottom: 1rem;
+  color: var(--color-title);
+}
+
+/* Formulário */
+.form {
+  display: flex;
+  flex-direction: column;
+}
+
+/* Inputs */
+.input {
+  margin-bottom: 1rem;
+  padding: 0.75rem;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  font-size: 1rem;
+}
+
+/* Botão */
+.button {
+  background-color: var(--color-button);
+  color: white;
+  border: none;
+  padding: 0.75rem;
+  border-radius: 8px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+/* Hover no botão */
+.button:hover {
+  background-color: var(--color-button-hover);
+}
+
+/* Texto de troca de contas */
+.switchText {
+  margin-top: 1rem;
+  font-size: 0.9rem;
+  color: var(--color-text);
+}
+
+/* Link de troca de contas */
+.switchLink {
+  color: var(--color-link);
+  cursor: pointer;
+  font-weight: bold;
+  margin-left: 0.25rem;
+}
+
+.switchLink:hover {
+  text-decoration: underline;
+}
+
+/* Media Queries */
+
+/* Para dispositivos móveis */
+@media (max-width: 768px) {
+  .card {
+    width: 90%; /* Ocupa quase toda a tela no celular */
+    padding: 1.5rem;
+  }
+
+  .logo {
+    width: 150px; /* Reduz o tamanho do logo */
+  }
+
+  .input, .button {
+    font-size: 0.9rem;
+  }
+}
+
+/* Para telas Full HD (1920x1080) */
+@media (min-width: 1920px) and (max-width: 3839px) {
+  .card {
+    padding: 3rem;
+    max-width: 600px; /* Aumenta a largura em telas maiores */
+  }
+
+  .input, .button {
+    font-size: 1.2rem; /* Aumenta o tamanho da fonte */
+  }
+}
+
+/* Para TVs 4K (3840x2160) */
+@media (min-width: 3840px) {
+  .card {
+    padding: 4rem;
+    max-width: 800px;
+  }
+
+  .input, .button {
+    font-size: 1.5rem;
+  }
+
+  .logo {
+    width: 300px; /* Aumenta o logo em TVs grandes */
+  }
+}
