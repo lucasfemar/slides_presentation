@@ -4,7 +4,7 @@ import Image from 'next/image';
 import logoIbpv from './images/logo-ibpv.png';
 import 'react-toastify/dist/ReactToastify.css'; 
 
-export default function RegistrationPage() {
+export default function Registration() {
   const [isRegister, setIsRegister] = useState(false);
   const [formData, setFormData] = useState({
     nome:       '',
