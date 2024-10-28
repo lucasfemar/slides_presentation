@@ -1,10 +1,19 @@
 import { useState } from 'react';
-import { toast, ToastContainer } from 'react-toastify';
-import Image from 'next/image';
-import logoIbpv from './images/logo-ibpv.png';
-import 'react-toastify/dist/ReactToastify.css'; 
+import { toast, ToastContainer } from 'react-toastify'; 
+import logoIbpv from '../public/logo-ibpv.png';
+import 'react-toastify/dist/ReactToastify.css';
+import {
+  Container,
+  Logo,
+  Card,
+  Form,
+  Input,
+  Button,
+  SwitchText,
+  SwitchLink,
+} from './styles';  
 
-export default function Registration() {
+export default function UserAccess() {
   const [isRegister, setIsRegister] = useState(false);
   const [formData, setFormData] = useState({
     nome:       '',
@@ -57,33 +66,32 @@ export default function Registration() {
   };
 
   return (
-    <div className='container'>
-      <Image src={logoIbpv} alt="Logo IBPV" className='logo' />
-      <div className='card'>
+    <Container>
+      <Logo src={logoIbpv} alt="Logo IBPV" />
+      <Card>
         <h1>{isRegister ? 'Cadastro' : 'Login'}</h1>
 
         <ToastContainer position="top-center" autoClose={3000} hideProgressBar={false} closeOnClick pauseOnHover draggable pauseOnFocusLoss />
 
-        <form className='form' onSubmit={handleSubmit}>
+        <Form onSubmit={handleSubmit}>
           {isRegister && (
             <>
-              <input type="text" placeholder="Nome Completo" className='input' name='nome' value={formData.nome} onChange={handleChange} required />
-              <input type="text" placeholder="Celular" className='input' name='celular' value={formData.celular} onChange={handleChange} required />
-              <input type="text" placeholder="Ministério" className='input' name='ministerio' value={formData.ministerio} onChange={handleChange} required />
+              <Input type="text" placeholder="Nome Completo" name='nome' value={formData.nome} onChange={handleChange} required />
+              <Input type="text" placeholder="Celular" name='celular' value={formData.celular} onChange={handleChange} required />
+              <Input type="text" placeholder="Ministério" name='ministerio' value={formData.ministerio} onChange={handleChange} required />
             </>
           )}
-          <input type="email" placeholder="Email" className='input' name='email' value={formData.email} onChange={handleChange} required />
-          <input type="password" placeholder="Senha" className='input' name='senha' value={formData.senha} onChange={handleChange} required />
+          <Input type="email" placeholder="Email" name='email' value={formData.email} onChange={handleChange} required />
+          <Input type="password" placeholder="Senha" name='senha' value={formData.senha} onChange={handleChange} required />
 
-          <button type="submit" className='button'> {isRegister ? 'Cadastrar' : 'Entrar'} </button>
-        </form>
+          <Button type="submit">{isRegister ? 'Cadastrar' : 'Entrar'}</Button>
+        </Form>
 
-        <p className='switchText'>
+        <SwitchText>
           {isRegister ? 'Já tem uma conta?' : 'Não tem uma conta?'}{' '}
-          <span onClick={toggleForm} className='switchLink'> {isRegister ? 'Entrar' : 'Cadastre-se'} </span>
-        </p>
-
-      </div>
-    </div>
+          <SwitchLink onClick={toggleForm}>{isRegister ? 'Entrar' : 'Cadastre-se'}</SwitchLink>
+        </SwitchText>
+      </Card>
+    </Container>
   );
 }
