@@ -11,6 +11,7 @@ import {
   Button,
   SwitchText,
   SwitchLink,
+  Title,
 } from './styles';  
 
 export default function UserAccess() {
@@ -69,7 +70,7 @@ export default function UserAccess() {
     <Container>
       <Logo src={logoIbpv} alt="Logo IBPV" />
       <Card>
-        <h1>{isRegister ? 'Cadastro' : 'Login'}</h1>
+        <Title>{isRegister ? 'Cadastro' : 'Login'}</Title>
 
         <ToastContainer position="top-center" autoClose={3000} hideProgressBar={false} closeOnClick pauseOnHover draggable pauseOnFocusLoss />
 

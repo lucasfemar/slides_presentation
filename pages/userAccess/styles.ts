@@ -1,72 +1,63 @@
-// src/styles.ts
-
+// src/components/UserConfig/styles.ts
 import styled from 'styled-components';
 import Image from 'next/image';
 
-// Definição de cores globais
-const colors = {
-  background: '#f7f7f7',
-  cardBackground: 'white',
-  borderColor: '#ccc',
-  primary: '#8a3489',
-  primaryHover: '#0056b3',
-  focusColor: '#007bff',
-  linkColor: '#007bff',
-  textColor: 'black', // Adicione esta cor caso queira usar para textos
-};
+// Título estilizado
+export const Title = styled.h1`
+  color: ${({ theme }) => theme.colors.titleColor};
+`;
 
 // Container principal da aplicação
 export const Container = styled.div`
   display: flex;
   flex-direction: column;
-  align-items: center; 
-  justify-content: center; /* Alinhamento inicial para permitir rolagem */
+  align-items: center;
+  justify-content: center;
   padding: 20px;
-  background-color: ${colors.background};
-  min-height: 90vh; 
-  max-height: 100vh; /* Limita a altura ao tamanho da tela */ 
+  background-color: ${({ theme }) => theme.colors.background};
+  min-height: 90vh;
+  max-height: 100vh;
 
-  /* Estilos responsivos */
-  @media (max-width: 600px) { /* Para dispositivos móveis */
+  @media (max-width: 600px) {
     padding: 10px;
   }
 
-  @media (min-width: 601px) and (max-width: 1200px) { /* Para tablets e laptops */
+  @media (min-width: 601px) and (max-width: 1200px) {
     padding: 15px;
   }
 
-  @media (min-width: 1201px) { /* Para monitores widescreen, 4K e 8K */
-    padding: 40px; /* Aumenta o padding em telas grandes */
+  @media (min-width: 1201px) {
+    padding: 40px;
   }
 `;
 
 // Logo da aplicação
 export const Logo = styled(Image)`
-  width: 150px; /* Ajusta a largura da logo para dispositivos móveis */
+  width: 150px;
   height: auto;
   margin-bottom: 20px;
 
   @media (min-width: 601px) {
-    width: 200px; /* Para tablets e maiores */
+    width: 200px;
   }
 
   @media (min-width: 1201px) {
-    width: 250px; /* Para telas grandes */
+    width: 250px;
   }
 `;
 
-// Cartão para o formulário
+// Cartão do formulário
 export const Card = styled.div`
-  background-color: ${colors.cardBackground};
+  background-color: ${({ theme }) => theme.colors.cardBackground};
   border-radius: 8px;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2); /* Sombra aplicada */
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
   padding: 20px;
   width: 100%;
   max-width: 400px;
   text-align: center;
 
   @media (min-width: 1201px) {
-    max-width: 600px; 
+    max-width: 600px;
   }
 `;
 
@@ -80,19 +71,19 @@ export const Form = styled.form`
 // Input do formulário
 export const Input = styled.input`
   padding: 10px;
-  border: 1px solid ${colors.borderColor};
+  border: 1px solid ${({ theme }) => theme.colors.borderColor};
   border-radius: 4px;
   width: 100%;
   box-sizing: border-box;
   font-size: 16px;
 
   &:focus {
-    border-color: ${colors.focusColor};
+    border-color: ${({ theme }) => theme.colors.focusColor};
     outline: none;
   }
 
   @media (max-width: 600px) {
-    font-size: 14px;  
+    font-size: 14px;
   }
 `;
 
@@ -101,17 +92,17 @@ export const Button = styled.button`
   padding: 10px;
   border: none;
   border-radius: 4px;
-  background-color: ${colors.primary};
+  background-color: ${({ theme }) => theme.colors.primary};
   color: white;
   font-size: 16px;
   cursor: pointer;
 
   &:hover {
-    background-color: ${colors.primaryHover};
+    background-color: ${({ theme }) => theme.colors.primaryHover};
   }
 
   @media (max-width: 600px) {
-    font-size: 14px;  
+    font-size: 14px;
   }
 `;
 
@@ -120,13 +111,13 @@ export const SwitchText = styled.p`
   margin-top: 10px;
 
   @media (max-width: 600px) {
-    font-size: 14px; 
+    font-size: 14px;
   }
 `;
 
 // Link para alternar entre cadastro e login
 export const SwitchLink = styled.span`
-  color: ${colors.linkColor};
+  color: ${({ theme }) => theme.colors.linkColor};
   cursor: pointer;
 
   &:hover {
@@ -134,6 +125,6 @@ export const SwitchLink = styled.span`
   }
 
   @media (max-width: 600px) {
-    font-size: 14px;  
+    font-size: 14px;
   }
 `;
