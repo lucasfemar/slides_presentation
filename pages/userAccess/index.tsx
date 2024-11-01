@@ -36,7 +36,7 @@ export default function UserAccess() {
     toast.dismiss();
 
     try {
-      const response = await fetch('/api/DATABASE_URL', {
+      const response = await fetch('http://localhost:3000/api/v1/user', { // TODO - Checar uso do AXIOS
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
