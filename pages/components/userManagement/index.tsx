@@ -1,55 +1,53 @@
-// UserManagement.tsx
-import React, { useState } from 'react';
-import UserTable from '../UserTable';
-import EditModal from '../EditModal';
-import { User } from '../../types'; // Importação correta
-import { Container, TableWrapper, ShadowTable } from './styles'; // Importando estilos
+import React, { useState, useEffect } from 'react';
+import UserTable from '../UserTable'; 
+import { User } from '../../types'; 
+import { FormContainer } from '../userManagement/styles'
+ 
+interface UserManagementProps {
+    initialUsers: User[];
+}
 
-const initialUsers: User[] = [
-    { id: 1, name: 'John Doe', email: 'john@example.com', phone: '(11) 99999-9999', ministry: 'Administração', active: true },
-    { id: 2, name: 'Jane Smith', email: 'jane@example.com', phone: '(11) 88888-8888', ministry: 'Evangelismo', active: false },
-];
-
-const UserManagement: React.FC = () => {
-    const [users, setUsers] = useState<User[]>(initialUsers);
+const UserManagement: React.FC<UserManagementProps> = ({ initialUsers }) => {
+    const [users, setUsers] = useState<User[]>([]);
     const [editingUser, setEditingUser] = useState<User | null>(null);
+    const [searchTerm, setSearchTerm] = useState('');
 
-    const handleEditUser = (user: User) => setEditingUser(user);
-
+    useEffect(() => {
+        setUsers(initialUsers);
+    }, [initialUsers]);
+ 
     const handleSaveUser = (updatedUser: User) => {
         setUsers(users.map(user => (user.id === updatedUser.id ? updatedUser : user)));
         setEditingUser(null);
-    };
-
-    const handleToggleActive = (id: number) => {
-        setUsers(users.map(user => (user.id === id ? { ...user, active: !user.active } : user)));
     };
 
     const handleResetPassword = (email: string) => {
         console.log(`Enviando email de redefinição de senha para ${email}`);
     };
 
+    const handleDeleteUser = (id: string) => {
+        console.log(`deletado`);
+    };
+
+
+    const filteredUsers = users.filter(user => {
+        const lowerCaseTerm = searchTerm.toLowerCase();
+        return (
+            user.nome.toLowerCase().includes(lowerCaseTerm) ||
+            user.email.toLowerCase().includes(lowerCaseTerm) ||
+            user.ministerio.toLowerCase().includes(lowerCaseTerm)
+        );
+    });
+
     return (
-        <Container>
-            <h1>Gerenciamento de Usuários</h1>
-            <TableWrapper>
-                <ShadowTable>
-                    <UserTable
-                        users={users}
-                        onEdit={handleEditUser}
-                        onToggleActive={handleToggleActive}
-                        onResetPassword={handleResetPassword}
-                    />
-                </ShadowTable>
-            </TableWrapper>
-            {editingUser && (
-                <EditModal 
-                    user={editingUser} 
-                    onSave={handleSaveUser} 
-                    onCancel={() => setEditingUser(null)} 
-                />
-            )}
-        </Container>
+        <FormContainer>
+            <UserTable
+                users={filteredUsers}
+                onDeleteUser={handleDeleteUser}
+                onAddUser={handleSaveUser}
+                onResetPassword={handleResetPassword}
+            />
+        </FormContainer>
     );
 };
 

@@ -1,9 +1,9 @@
 // types.ts
 export interface User {
-    id: number;
-    name: string;
+    id: string;
+    nome: string;
     email: string;
-    phone: string;
-    ministry: string;
-    active: boolean; // Exemplo de status de ativação
+    celular: string;
+    ministerio: string;
+    ativo: boolean;  
 }

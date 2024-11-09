@@ -13,10 +13,9 @@ export const Container = styled.div`
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  padding: 20px;
-  background-color: ${({ theme }) => theme.colors.background};
-  min-height: 90vh;
-  max-height: 100vh;
+  height: 100vh; /* Ocupa toda a altura da tela */
+  padding: 20px; /* Padding padrão para espaçamento interno */
+  box-sizing: border-box;
 
   @media (max-width: 600px) {
     padding: 10px;
@@ -122,9 +121,5 @@ export const SwitchLink = styled.span`
 
   &:hover {
     text-decoration: underline;
-  }
-
-  @media (max-width: 600px) {
-    font-size: 14px;
   }
 `;

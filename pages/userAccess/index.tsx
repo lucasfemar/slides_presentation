@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { toast, ToastContainer } from 'react-toastify'; 
 import logoIbpv from '../public/logo-ibpv.png';
+import axios from 'axios';
 import 'react-toastify/dist/ReactToastify.css';
 import {
   Container,
@@ -34,32 +35,31 @@ export default function UserAccess() {
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     toast.dismiss();
-
+  
     try {
-      const response = await fetch('http://localhost:3000/api/v1/user', { // TODO - Checar uso do AXIOS
-        method: 'POST',
+      // Usando axios para enviar os dados
+      const response = await axios.post('http://localhost:3000/api/v1/user', formData, {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify(formData),
       });
-
-      if (!response.ok) {
+  
+      // Verifica se a resposta foi bem-sucedida
+      if (response.status === 200) {
+        toast.success('Dados enviados com sucesso!');
+        console.log('Dados enviados com sucesso:', response.data);
+  
+        // Limpar os dados do formulário após o sucesso
+        setFormData({
+          nome:       '',
+          celular:    '',
+          ministerio: '',
+          email:      '',
+          senha:      '',
+        });
+      } else {
         throw new Error('Erro ao enviar os dados');
       }
-
-      const result = await response.json();
-      toast.success('Dados enviados com sucesso!');
-      console.log('Dados enviados com sucesso:', result);
-
-      setFormData({
-        nome:       '',
-        celular:    '',
-        ministerio: '',
-        email:      '',
-        senha:      '',
-      });
-
     } catch (error) {
       console.error('Erro:', error);
       toast.error('Houve um problema ao enviar os dados. Tente novamente.');

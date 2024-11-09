@@ -1,15 +1,18 @@
 import styled from 'styled-components';
+import Image from 'next/image';
 
 export const FooterContainer = styled.footer`
-  position: fixed;
-  bottom: 0;
-  left: 0;
-  width: 100%;
-  height: var(--footer-height);
-  padding: 20px 30px;
-  background-color: ${({ theme }) => theme.colors.footerBackground};
-  box-shadow: 0 -8px 16px ${({ theme }) => theme.colors.footerShadow};
-  z-index: 1000;
+ position: fixed;
+    bottom: 0;
+    width: 100%;
+    height: var(--footer-height, 50px); // Variável para ajustar altura
+    background-color: #333;
+    color: white;
+    z-index: 10;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-image: linear-gradient(to right, #0f62ac, #8f448e); 
 
   display: flex;
   align-items: center;
@@ -17,22 +20,24 @@ export const FooterContainer = styled.footer`
   
   .footer-content {
     display: flex;
+    
+    text-align: center;
     align-items: center;
     justify-content: center; 
     gap: 15px;
 
     p {      
-      color: ${({ theme }) => theme.colors.titleColor};
+      color: #fff;
     }
 
     a {
       text-decoration: none;
-      color: ${({ theme }) => theme.colors.linkColor};
+      color: #fff;
       font-weight: 500;
       transition: color 0.3s ease;
 
       &:hover {
-        color: ${({ theme }) => theme.colors.primaryHover};
+        color: #fff;
       }
     }
   }
@@ -45,5 +50,17 @@ export const FooterContainer = styled.footer`
       flex-direction: column;
       gap: 10px;
     }
+  }
+`;
+
+
+/* === Logo === */
+export const Logo = styled(Image)`
+  margin-right: 20px; /* Alinha o logo à esquerda */
+  width: 180px;
+  height: auto;
+
+  @media (min-width: 768px) {
+    width: 200px;
   }
 `;

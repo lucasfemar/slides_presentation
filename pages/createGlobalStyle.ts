@@ -6,7 +6,7 @@ export const GlobalStyle = createGlobalStyle`
 
   /* global.css ou styles.css */
   :root {
-    --header-height: 60px; /* Defina aqui a altura do Header */
+    --header-height: 100px; /* Defina aqui a altura do Header */
     --footer-height: 15vh; /* ou outra altura desejada para o Footer */
   }
 
