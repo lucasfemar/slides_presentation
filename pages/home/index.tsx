@@ -27,7 +27,7 @@ const Home: React.FC = () => {
 
   return (
     <>
-      <Header />
+      {/* <Header /> */}
       {/* <Content> */}
         <UserManagement  initialUsers={users} />
       {/* </Content> */}
