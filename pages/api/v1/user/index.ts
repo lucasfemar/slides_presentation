@@ -14,11 +14,12 @@ const apiService: IApiService = {
   POST: async (request: NextApiRequest) => {
     const { body } = request;
     const userSchema = z.object({
-      nome: z.string(),
-      celular: z.string(),
-      ministerio: z.string(),
+      name: z.string(),
+      phone: z.string(),
+      ministery: z.string(),
       email: z.string(),
-      senha: z.string(),
+      password: z.string(),
+      status: z.boolean(),
     });
     const user = userSchema.parse(body);
     const createdUser = await prisma.user.create({

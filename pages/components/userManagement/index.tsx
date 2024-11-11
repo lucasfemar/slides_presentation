@@ -33,9 +33,9 @@ const UserManagement: React.FC<UserManagementProps> = ({ initialUsers }) => {
     const filteredUsers = users.filter(user => {
         const lowerCaseTerm = searchTerm.toLowerCase();
         return (
-            user.nome.toLowerCase().includes(lowerCaseTerm) ||
+            user.name.toLowerCase().includes(lowerCaseTerm) ||
             user.email.toLowerCase().includes(lowerCaseTerm) ||
-            user.ministerio.toLowerCase().includes(lowerCaseTerm)
+            user.ministery.toLowerCase().includes(lowerCaseTerm)
         );
     });
 
@@ -43,8 +43,7 @@ const UserManagement: React.FC<UserManagementProps> = ({ initialUsers }) => {
         <FormContainer>
             <UserTable
                 users={filteredUsers}
-                onDeleteUser={handleDeleteUser}
-                onAddUser={handleSaveUser}
+                onDeleteUser={handleDeleteUser} 
                 onResetPassword={handleResetPassword}
             />
         </FormContainer>

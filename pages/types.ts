@@ -1,9 +1,10 @@
 // types.ts
 export interface User {
     id: string;
-    nome: string;
+    name: string;
     email: string;
-    celular: string;
-    ministerio: string;
-    ativo: boolean;  
+    phone: string;
+    ministery: string;
+    password: string;
+    status: boolean;  
 }

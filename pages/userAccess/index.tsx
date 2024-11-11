@@ -18,11 +18,12 @@ import {
 export default function UserAccess() {
   const [isRegister, setIsRegister] = useState(false);
   const [formData, setFormData] = useState({
-    nome:       '',
-    celular:    '',
-    ministerio: '',
-    email:      '',
-    senha:      '',
+    name:      '',
+    phone:     '',
+    ministery: '',
+    email:     '',
+    password:  '',
+    status:    false,
   });
 
   const toggleForm = () => setIsRegister(prev => !prev);
@@ -36,26 +37,24 @@ export default function UserAccess() {
     e.preventDefault();
     toast.dismiss();
   
-    try {
-      // Usando axios para enviar os dados
+    try { 
       const response = await axios.post('http://localhost:3000/api/v1/user', formData, {
         headers: {
           'Content-Type': 'application/json',
         },
       });
-  
-      // Verifica se a resposta foi bem-sucedida
+   
       if (response.status === 200) {
         toast.success('Dados enviados com sucesso!');
         console.log('Dados enviados com sucesso:', response.data);
-  
-        // Limpar os dados do formulário após o sucesso
+   
         setFormData({
-          nome:       '',
-          celular:    '',
-          ministerio: '',
-          email:      '',
-          senha:      '',
+          name:      '',
+          phone:     '',
+          ministery: '',
+          email:     '',
+          password:  '',
+          status:    false,
         });
       } else {
         throw new Error('Erro ao enviar os dados');
@@ -77,13 +76,13 @@ export default function UserAccess() {
         <Form onSubmit={handleSubmit}>
           {isRegister && (
             <>
-              <Input type="text" placeholder="Nome Completo" name='nome' value={formData.nome} onChange={handleChange} required />
-              <Input type="text" placeholder="Celular" name='celular' value={formData.celular} onChange={handleChange} required />
-              <Input type="text" placeholder="Ministério" name='ministerio' value={formData.ministerio} onChange={handleChange} required />
+              <Input type="text" placeholder="Nome Completo" name='name' value={formData?.name} onChange={handleChange} required />
+              <Input type="text" placeholder="Celular" name='phone' value={formData?.phone} onChange={handleChange} required />
+              <Input type="text" placeholder="Ministério" name='ministery' value={formData?.ministery} onChange={handleChange} required />
             </>
           )}
-          <Input type="email" placeholder="Email" name='email' value={formData.email} onChange={handleChange} required />
-          <Input type="password" placeholder="Senha" name='senha' value={formData.senha} onChange={handleChange} required />
+          <Input type="email" placeholder="Email" name='email' value={formData?.email} onChange={handleChange} required />
+          <Input type="password" placeholder="Senha" name='password' value={formData.password} onChange={handleChange} required />
 
           <Button type="submit">{isRegister ? 'Cadastrar' : 'Entrar'}</Button>
         </Form>

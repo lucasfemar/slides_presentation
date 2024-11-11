@@ -8,6 +8,7 @@ import { CustomButton } from '../UserTable/styles';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { MRT_Localization_PT } from 'material-react-table/locales/pt';
+import axios from 'axios';
 
 interface User {
   id: string;
@@ -22,32 +23,13 @@ interface UserTableProps {
   users: User[];
   onDeleteUser: (id: string) => void;
   onResetPassword: (email: string) => void;
-  onAddUser: (newUser: User) => void;
 }
 
-const UserTable: React.FC<UserTableProps> = ({ users, onDeleteUser, onResetPassword, onAddUser }) => {
+const UserTable: React.FC<UserTableProps> = ({ users, onDeleteUser, onResetPassword }) => {
 
-  users = [
-    { id: '1234', name: 'Elton', email: 'elton@gmail.com', phone: '1198234586', ministery: 'Rede Teens', status: false },
-    { id: '1235', name: 'Ana', email: 'ana@gmail.com', phone: '1198765432', ministery: 'Rede Jovem', status: true },
-    { id: '1236', name: 'Carlos', email: 'carlos@gmail.com', phone: '1198123456', ministery: 'Louvor', status: true },
-    { id: '1237', name: 'Fernanda', email: 'fernanda@gmail.com', phone: '1198345678', ministery: 'Crianças', status: false },
-    { id: '1238', name: 'Lucas', email: 'lucas@gmail.com', phone: '1198456789', ministery: 'Missões', status: true },
-    { id: '1239', name: 'Mariana', email: 'mariana@gmail.com', phone: '1198567890', ministery: 'Intercessão', status: true },
-    { id: '1240', name: 'Pedro', email: 'pedro@gmail.com', phone: '1198678901', ministery: 'Evangelismo', status: false },
-    { id: '1241', name: 'Juliana', email: 'juliana@gmail.com', phone: '1198789012', ministery: 'Rede Mulheres', status: true },
-    { id: '1242', name: 'Rafael', email: 'rafael@gmail.com', phone: '1198890123', ministery: 'Rede Jovem', status: false },
-    { id: '1243', name: 'Patrícia', email: 'patricia@gmail.com', phone: '1198901234', ministery: 'Louvor', status: true },
-    { id: '1244', name: 'Tiago', email: 'tiago@gmail.com', phone: '1199012345', ministery: 'Crianças', status: false },
-    { id: '1245', name: 'Beatriz', email: 'beatriz@gmail.com', phone: '1199123456', ministery: 'Rede Jovem', status: true },
-    { id: '1246', name: 'Rodrigo', email: 'rodrigo@gmail.com', phone: '1199234567', ministery: 'Intercessão', status: true },
-    { id: '1247', name: 'Renata', email: 'renata@gmail.com', phone: '1199345678', ministery: 'Rede Mulheres', status: false },
-    { id: '1248', name: 'Leonardo', email: 'leonardo@gmail.com', phone: '1199456789', ministery: 'Evangelismo', status: true },
-    { id: '1249', name: 'Larissa', email: 'larissa@gmail.com', phone: '1199567890', ministery: 'Rede Jovem', status: true }];
-
-  const [openEditDialog, setOpenEditDialog] = useState(false);
-  const [openAddDialog, setOpenAddDialog] = useState(false);
+  const [openModal, setOpenModal] = useState(false); 
   const [editingUser, setEditingUser] = useState<User | null>(null);
+  const [isEditMode, setIsEditMode] = useState<boolean>(false);
   const [newUser, setNewUser] = useState<User>({
     id: '',
     name: '',
@@ -59,39 +41,65 @@ const UserTable: React.FC<UserTableProps> = ({ users, onDeleteUser, onResetPassw
 
   const handleEditClick = (user: User) => {
     setEditingUser(user);
-    setOpenEditDialog(true);
+    setIsEditMode(true);
+    setOpenModal(true);
   };
 
-  const handleAddClick = () => {
+  const handleAddClick = async (newUser: User) => {
+     
+    try {
+      const userData = {
+        name: newUser.name,
+        email: newUser.email,
+        phone: newUser.phone,
+        ministery: newUser.ministery,
+        status: Boolean(newUser.status),
+        password: newUser.name+123
+      };
+  
+      const response = await axios.post('http://localhost:3000/api/v1/user', userData); 
+    } catch (error) {
+      console.error('Erro ao adicionar usuário:', error);
+      throw error;  
+    }
+  }; 
+
+  const addUserHandler = () => {
     setNewUser({ id: '', name: '', email: '', phone: '', ministery: '', status: false });
-    setOpenAddDialog(true);
-  };
+    setIsEditMode(false);
+    setOpenModal(true);
+  }; 
 
   const handleCloseDialog = () => {
-    setOpenEditDialog(false);
+    setOpenModal(false);
     setEditingUser(null);
   };
 
-  const handleCloseAddDialog = () => {
-    setOpenAddDialog(false);
-    setNewUser({ id: '', name: '', email: '', phone: '', ministery: '', status: false });
-  };
-
   const handleEditUser = () => {
-    if (editingUser && editingUser.name) {
-      toast.success(`Usuário ${editingUser.name} adicionado com sucesso! (FALTA IMPLEMENTAÇÃO)`);
+    if (editingUser && editingUser?.name) {
+      toast.success(`Usuário ${editingUser?.name} adicionado com sucesso! (FALTA IMPLEMENTAÇÃO)`);
     } else {
       toast.error('Erro: Usuário não encontrado.');
     }
   };
 
   const handleAddUser = async () => {
+    console.log('Dados do usuário antes do envio:', newUser);
     if (newUser && newUser.name) {
-      toast.success(`Usuário ${newUser.name} adicionado com sucesso! (FALTA IMPLEMENTAÇÃO)`);
+      try {
+        await handleAddClick(newUser);
+        toast.success(`Usuário ${newUser.name} adicionado com sucesso!`);
+        setOpenModal(false);
+      } catch (error) {
+        console.error('Erro ao adicionar usuário:', error);
+        toast.error('Erro ao adicionar usuário. Verifique os dados e tente novamente.');
+      }
     } else {
-      toast.error('Erro: Usuário não encontrado.');
+      toast.error('Erro: Usuário não encontrado ou dados incompletos.');
     }
   };
+
+
 
   const handleFieldChange = (field: keyof User, value: string | boolean, isNewUser = false) => {
     if (isNewUser) {
@@ -214,57 +222,76 @@ const UserTable: React.FC<UserTableProps> = ({ users, onDeleteUser, onResetPassw
           enableColumnOrdering
           renderTopToolbarCustomActions={() => (
             <Box sx={{ display: 'flex', justifyContent: 'flex-end', paddingBottom: 2 }}>
-              <CustomButton variant="contained" color="primary" startIcon={<AddIcon />} onClick={() => { /* handleAddClick logic */ }}>Adicionar Usuário</CustomButton>
+              <CustomButton variant="contained" color="primary" startIcon={<AddIcon />} onClick={(addUserHandler)}>Adicionar Usuário</CustomButton>
             </Box>
           )}
         />
       </Box>
 
-      {/* Modal de Edição */}
-      <Dialog open={openEditDialog} onClose={handleCloseDialog} maxWidth="sm" fullWidth>
-        <DialogTitle sx={{ color: "#0d62ac" }} >Editar Usuário</DialogTitle>
+      <Dialog open={openModal} onClose={handleCloseDialog} maxWidth="sm" fullWidth>
+        {isEditMode ? (
+          <DialogTitle sx={{ color: "#0d62ac" }} >Editar Usuário</DialogTitle>
+        ) : (
+          <DialogTitle sx={{ color: "#0d62ac" }}>Adicionar Usuário</DialogTitle>
+        )}
+
         <DialogContent sx={{ display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
 
-          <TextField label="Nome" fullWidth margin="normal" value={editingUser?.name || ''} onChange={(e) => handleFieldChange('name', e.target.value)} />
-          <TextField label="Email" fullWidth margin="normal" value={editingUser?.email || ''} onChange={(e) => handleFieldChange('email', e.target.value)} />
-          <TextField label="Celular" fullWidth margin="normal" value={editingUser?.phone || ''} onChange={(e) => handleFieldChange('phone', e.target.value)} />
-          <TextField label="Ministério" fullWidth margin="normal" value={editingUser?.ministery || ''} onChange={(e) => handleFieldChange('ministery', e.target.value)} />
+          <TextField label="Nome" fullWidth margin="normal" value={isEditMode ? editingUser?.name || '' : newUser?.name}
+            onChange={(e) =>
+              isEditMode
+                ? handleFieldChange('name', e.target.value)
+                : handleFieldChange('name', e.target.value, true)
+            } />
+
+          <TextField label="Email" fullWidth margin="normal" value={isEditMode ? editingUser?.email || '' : newUser?.email}
+            onChange={(e) =>
+              isEditMode
+                ? handleFieldChange('email', e.target.value)
+                : handleFieldChange('email', e.target.value, true)
+            }
+          />
+
+          <TextField label="Celular" fullWidth margin="normal" value={isEditMode ? editingUser?.phone || '' : newUser?.phone}
+            onChange={(e) =>
+              isEditMode
+                ? handleFieldChange('phone', e.target.value)
+                : handleFieldChange('phone', e.target.value, true)
+            }
+          />
+
+          <TextField label="Ministério" fullWidth margin="normal" value={isEditMode ? editingUser?.ministery || '' : newUser?.ministery}
+            onChange={(e) =>
+              isEditMode
+                ? handleFieldChange('ministery', e.target.value)
+                : handleFieldChange('ministery', e.target.value, true)
+            }
+          />
+
 
           <Box display="flex" alignItems="center" mt={2}>
             <Typography>Ativo</Typography>
-            <Switch checked={editingUser?.status || false} onChange={(e) => handleFieldChange('status', e.target.checked)} />
+            <Switch checked={isEditMode ? editingUser?.status || false : newUser?.status}
+              onChange={(e) =>
+                isEditMode
+                  ? handleFieldChange('status', e.target.checked)
+                  : handleFieldChange('status', e.target.checked, true)
+              }
+            />
           </Box>
 
         </DialogContent>
         <DialogActions>
           <Button onClick={handleCloseDialog} color="secondary">Cancelar</Button>
-          <Button onClick={handleEditUser} sx={{ color: "#0d62ac" }}>Salvar</Button>
+
+          {isEditMode ? (
+            <Button onClick={handleEditUser} sx={{ color: "#0d62ac" }}>Salvar</Button>
+          ) : (
+            <Button onClick={handleAddUser} sx={{ color: "#0d62ac" }}>Adicionar</Button>
+          )}
+
         </DialogActions>
       </Dialog>
-
-      {/* Modal de Adição */}
-      <Dialog open={openAddDialog} onClose={handleCloseAddDialog} maxWidth="sm" fullWidth>
-        <DialogTitle sx={{ color: "#0d62ac" }}>Adicionar Usuário</DialogTitle>
-        <DialogContent sx={{ display: 'flex', flexDirection: 'column', flexGrow: 1 }}>
-
-          <TextField label="name" fullWidth value={newUser.name} onChange={(e) => handleFieldChange('name', e.target.value, true)} />
-          <TextField label="Email" fullWidth margin="normal" value={newUser.email} onChange={(e) => handleFieldChange('email', e.target.value, true)} />
-          <TextField label="phone" fullWidth margin="normal" value={newUser.phone} onChange={(e) => handleFieldChange('phone', e.target.value, true)} />
-          <TextField label="Ministério" fullWidth margin="normal" value={newUser.ministery} onChange={(e) => handleFieldChange('ministery', e.target.value, true)} />
-
-          <Box display="flex" alignItems="center" mt={2}>
-            <Typography>status</Typography>
-            <Switch checked={newUser.status} onChange={(e) => handleFieldChange('status', e.target.checked, true)} />
-          </Box>
-
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={handleCloseAddDialog} color="secondary">Cancelar</Button>
-          <Button onClick={handleAddUser} sx={{ color: "#0d62ac" }}>Adicionar</Button>
-        </DialogActions>
-      </Dialog>
-
-      {/* Toast Container */}
       <ToastContainer />
     </>
   );
