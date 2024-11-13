@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import Header from '../components/header';
-import Footer from '../components/footer';
+import Header from '../components/header/index';
+import Footer from '../components/Footer';
 import UserManagement from '../components/userManagement';
 // import { Content } from '../home/styles';
 import { User } from '../types';

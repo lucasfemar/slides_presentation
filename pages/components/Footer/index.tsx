@@ -1,7 +1,7 @@
 // src/components/Footer.tsx
 import React from 'react';  
-import { FooterContainer } from '../footer/styles';  
-import { Logo } from '../footer/styles';
+import { FooterContainer } from './styles';  
+import { Logo } from './styles';
 import logoIbpv from '../../public/logo ibpv branco.png'
 
 const Footer: React.FC = () => {

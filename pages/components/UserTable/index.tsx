@@ -27,7 +27,7 @@ interface UserTableProps {
 
 const UserTable: React.FC<UserTableProps> = ({ users, onDeleteUser, onResetPassword }) => {
 
-  const [openModal, setOpenModal] = useState(false); 
+  const [openModal, setOpenModal] = useState(false);
   const [editingUser, setEditingUser] = useState<User | null>(null);
   const [isEditMode, setIsEditMode] = useState<boolean>(false);
   const [newUser, setNewUser] = useState<User>({
@@ -46,7 +46,7 @@ const UserTable: React.FC<UserTableProps> = ({ users, onDeleteUser, onResetPassw
   };
 
   const handleAddClick = async (newUser: User) => {
-     
+
     try {
       const userData = {
         name: newUser.name,
@@ -54,21 +54,21 @@ const UserTable: React.FC<UserTableProps> = ({ users, onDeleteUser, onResetPassw
         phone: newUser.phone,
         ministery: newUser.ministery,
         status: Boolean(newUser.status),
-        password: newUser.name+123
+        password: newUser.name + 123
       };
-  
-      const response = await axios.post('http://localhost:3000/api/v1/user', userData); 
+
+      const response = await axios.post('http://localhost:3000/api/v1/user', userData);
     } catch (error) {
       console.error('Erro ao adicionar usuário:', error);
-      throw error;  
+      throw error;
     }
-  }; 
+  };
 
   const addUserHandler = () => {
     setNewUser({ id: '', name: '', email: '', phone: '', ministery: '', status: false });
     setIsEditMode(false);
     setOpenModal(true);
-  }; 
+  };
 
   const handleCloseDialog = () => {
     setOpenModal(false);
@@ -171,9 +171,24 @@ const UserTable: React.FC<UserTableProps> = ({ users, onDeleteUser, onResetPassw
 
           // Definindo a altura fixa da tabela, mantendo a altura máxima sem scroll
           '& .MuiTableContainer-root': {
-            maxHeight: '34rem',       // Altura fixa para a tabela
-            overflowY: 'hidden',      // Remove a rolagem vertical
-          },
+            maxHeight: '34rem', // Altura fixa para a tabela
+            overflowY: 'scroll',
+ 
+            '&::-webkit-scrollbar': {
+              width: '8px', // Espessura da barra de rolagem vertical
+              height: '8px', // Espessura da barra de rolagem horizontal (caso aplicável)
+            },
+            '&::-webkit-scrollbar-thumb': {
+              backgroundColor: '#8a3488', // Cor da parte que se move da barra de rolagem 
+              borderRadius: '4px', // Borda arredondada
+            },
+            '&::-webkit-scrollbar-thumb:hover': {
+              backgroundColor: '#0d62ac', // Cor quando o mouse passa por cima
+            },
+            '&::-webkit-scrollbar-track': { 
+              backgroundColor: '#f1f1f1', // Cor da trilha da barra de rolagem
+            },
+          }, 
 
           // Responsividade para telas pequenas (celulares) - NÃO ESTA FUNCIONANDO
           '@media (max-width: 600px)': {
@@ -215,7 +230,9 @@ const UserTable: React.FC<UserTableProps> = ({ users, onDeleteUser, onResetPassw
         }}>
           Gerenciamento de Usuários
         </Box>
+        
         <MaterialReactTable
+          enableDensityToggle={false} 
           columns={columns}
           data={users}
           localization={MRT_Localization_PT}
