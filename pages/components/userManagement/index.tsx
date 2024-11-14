@@ -23,12 +23,7 @@ const UserManagement: React.FC<UserManagementProps> = ({ initialUsers }) => {
 
     const handleResetPassword = (email: string) => {
         console.log(`Enviando email de redefinição de senha para ${email}`);
-    };
-
-    const handleDeleteUser = (id: string) => {
-        console.log(`deletado`);
-    };
-
+    }; 
 
     const filteredUsers = users.filter(user => {
         const lowerCaseTerm = searchTerm.toLowerCase();
@@ -42,8 +37,7 @@ const UserManagement: React.FC<UserManagementProps> = ({ initialUsers }) => {
     return (
         <FormContainer>
             <UserTable
-                users={filteredUsers}
-                onDeleteUser={handleDeleteUser} 
+                users={filteredUsers} 
                 onResetPassword={handleResetPassword}
             />
         </FormContainer>

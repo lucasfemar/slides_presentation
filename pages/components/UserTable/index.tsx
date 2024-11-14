@@ -21,11 +21,10 @@ interface User {
 
 interface UserTableProps {
   users: User[];
-  onDeleteUser: (id: string) => void;
   onResetPassword: (email: string) => void;
 }
 
-const UserTable: React.FC<UserTableProps> = ({ users, onDeleteUser, onResetPassword }) => {
+const UserTable: React.FC<UserTableProps> = ({ users, onResetPassword }) => {
 
   const [openModal, setOpenModal] = useState(false);
   const [editingUser, setEditingUser] = useState<User | null>(null);
@@ -98,8 +97,6 @@ const UserTable: React.FC<UserTableProps> = ({ users, onDeleteUser, onResetPassw
     }
   };
 
-
-
   const handleFieldChange = (field: keyof User, value: string | boolean, isNewUser = false) => {
     if (isNewUser) {
       setNewUser({ ...newUser, [field]: value });
@@ -107,6 +104,22 @@ const UserTable: React.FC<UserTableProps> = ({ users, onDeleteUser, onResetPassw
       setEditingUser({ ...editingUser, [field]: value } as User);
     }
   };
+
+  const handleDeleteUser = async (id: string, name: string) => {
+    try {
+      const response = await axios.delete(`http://localhost:3000/api/v1/user/${id}`);
+      toast.success(`Usuário ${name} deletado com sucesso!`);
+    } catch (error: unknown) {
+      console.error('Erro:', error);
+      if (error instanceof Error) {
+        toast.error(`Erro ao tentar excluir o usuário: ${error.message}`);
+      } else {
+        toast.error('Erro desconhecido ao excluir o usuário');
+      }
+    }
+  };
+  
+  
 
   const columns = useMemo<MRT_ColumnDef<User>[]>(() => [
     {
@@ -150,14 +163,14 @@ const UserTable: React.FC<UserTableProps> = ({ users, onDeleteUser, onResetPassw
             </IconButton>
           </Tooltip>
           <Tooltip title="Deletar">
-            <IconButton onClick={() => onDeleteUser(row.original.id)} color="secondary">
+            <IconButton onClick={() => handleDeleteUser(row.original.id, row.original.name)} color="secondary">
               <DeleteIcon />
             </IconButton>
           </Tooltip>
         </Box>
       ),
     },
-  ], [onDeleteUser]);
+  ], []);
 
   return (
     <>

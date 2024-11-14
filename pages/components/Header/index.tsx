@@ -1,7 +1,7 @@
 // src/components/Header.tsx
 import React from 'react'; 
 // import Image from 'next/image';
-import { HeaderContainer, Logo } from '../header/styles';
+import { HeaderContainer, Logo } from '../Header/styles';
 import logoIbpv from '../../public/logo-ibpv.png'
 
 const Header: React.FC = () => {

@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { toast, ToastContainer } from 'react-toastify'; 
+import { toast, ToastContainer } from 'react-toastify';
 import logoIbpv from '../public/logo-ibpv.png';
 import axios from 'axios';
 import 'react-toastify/dist/ReactToastify.css';
@@ -13,7 +13,7 @@ import {
   SwitchText,
   SwitchLink,
   Title,
-} from './styles';  
+} from './styles';
 
 export default function UserAccess() {
   const [isRegister, setIsRegister] = useState(false);
@@ -36,18 +36,18 @@ export default function UserAccess() {
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     toast.dismiss();
-  
-    try { 
+
+    try {
       const response = await axios.post('http://localhost:3000/api/v1/user', formData, {
         headers: {
           'Content-Type': 'application/json',
         },
       });
-   
+
       if (response.status === 200) {
         toast.success('Dados enviados com sucesso!');
         console.log('Dados enviados com sucesso:', response.data);
-   
+
         setFormData({
           name:      '',
           phone:     '',
@@ -59,9 +59,15 @@ export default function UserAccess() {
       } else {
         throw new Error('Erro ao enviar os dados');
       }
-    } catch (error) {
+    } catch (error: unknown) {
       console.error('Erro:', error);
-      toast.error('Houve um problema ao enviar os dados. Tente novamente.');
+
+      if (error instanceof Error) {
+        const backendErrorMessage = (error as any).response?.data?.message || 'Houve um problema ao enviar os dados. Tente novamente.';
+        toast.error(backendErrorMessage);
+      } else {
+        toast.error('Erro desconhecido.');
+      }
     }
   };
 
