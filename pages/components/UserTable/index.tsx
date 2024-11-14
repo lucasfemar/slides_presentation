@@ -83,8 +83,7 @@ const UserTable: React.FC<UserTableProps> = ({ users, onDeleteUser, onResetPassw
     }
   };
 
-  const handleAddUser = async () => {
-    console.log('Dados do usuário antes do envio:', newUser);
+  const handleAddUser = async () => { 
     if (newUser && newUser.name) {
       try {
         await handleAddClick(newUser);
@@ -92,7 +91,7 @@ const UserTable: React.FC<UserTableProps> = ({ users, onDeleteUser, onResetPassw
         setOpenModal(false);
       } catch (error) {
         console.error('Erro ao adicionar usuário:', error);
-        toast.error('Erro ao adicionar usuário. Verifique os dados e tente novamente.');
+        toast.error('Erro ao adicionar usuário. Verifique os dados e tente novamente. ');
       }
     } else {
       toast.error('Erro: Usuário não encontrado ou dados incompletos.');
