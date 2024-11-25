@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react';
-import Header from '../components/Header/index';
 import Footer from '../components/Footer';
 import UserManagement from '../components/userManagement';
 // import { Content } from '../home/styles';
@@ -9,7 +8,7 @@ const Home: React.FC = () => {
   const [users, setUsers] = useState<User[]>([]);
   const fetchUsers = async () => {
     try {
-      const response = await fetch('http://localhost:3000/api/v1/user');
+      const response = await fetch('/api/v1/user');
       if (!response.ok) {
         throw new Error('Network response was not ok');
       }

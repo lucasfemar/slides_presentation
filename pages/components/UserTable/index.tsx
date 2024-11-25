@@ -56,7 +56,7 @@ const UserTable: React.FC<UserTableProps> = ({ users, onResetPassword }) => {
         password: newUser.name + 123
       };
 
-      const response = await axios.post('http://localhost:3000/api/v1/user', userData);
+      const response = await axios.post('/api/v1/user', userData);
     } catch (error) {
       console.error('Erro ao adicionar usuário:', error);
       throw error;
@@ -107,7 +107,7 @@ const UserTable: React.FC<UserTableProps> = ({ users, onResetPassword }) => {
 
   const handleDeleteUser = async (id: string, name: string) => {
     try {
-      const response = await axios.delete(`http://localhost:3000/api/v1/user/${id}`);
+      const response = await axios.delete(`/api/v1/user/${id}`);
       toast.success(`Usuário ${name} deletado com sucesso!`);
     } catch (error: unknown) {
       console.error('Erro:', error);

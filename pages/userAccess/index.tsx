@@ -38,7 +38,7 @@ export default function UserAccess() {
     toast.dismiss();
 
     try {
-      const response = await axios.post('http://localhost:3000/api/v1/user', formData, {
+      const response = await axios.post('/api/v1/user/', formData, {
         headers: {
           'Content-Type': 'application/json',
         },
