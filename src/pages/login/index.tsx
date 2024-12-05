@@ -1,22 +1,22 @@
+import axios from "axios";
 import { useState } from "react";
 import { toast, ToastContainer } from "react-toastify";
-import logoIbpv from "../public/logo-ibpv.png";
-import axios from "axios";
 import "react-toastify/dist/ReactToastify.css";
+import logoIbpv from "src/public/logo-ibpv.png";
 import {
-  Container,
-  Logo,
+  Button,
   Card,
+  Container,
   Form,
   Input,
-  Button,
-  SwitchText,
+  Logo,
   SwitchLink,
+  SwitchText,
   Title,
 } from "./styles";
 import { useRouter } from "next/router";
 
-export default function Register() {
+export default function Login() {
   const router = useRouter();
   const [formData, setFormData] = useState({
     name: "",
@@ -37,7 +37,7 @@ export default function Register() {
     toast.dismiss();
 
     try {
-      const response = await axios.post("/api/v1/user/", formData, {
+      const response = await axios.post("/api/v1/login/", formData, {
         headers: {
           "Content-Type": "application/json",
         },
@@ -76,8 +76,7 @@ export default function Register() {
     <Container>
       <Logo src={logoIbpv} alt="Logo IBPV" />
       <Card>
-        <Title>Cadastro</Title>
-
+        <Title>Login</Title>
         <ToastContainer
           position="top-center"
           autoClose={3000}
@@ -87,42 +86,31 @@ export default function Register() {
           draggable
           pauseOnFocusLoss
         />
-
         <Form onSubmit={handleSubmit}>
-          <>
-            <Input
-              type="text"
-              placeholder="Nome Completo"
-              name="name"
-              value={formData?.name}
-              onChange={handleChange}
-              required
-            />
-            <Input
-              type="text"
-              placeholder="Celular"
-              name="phone"
-              value={formData?.phone}
-              onChange={handleChange}
-              required
-            />
-            <Input
-              type="text"
-              placeholder="Ministério"
-              name="ministery"
-              value={formData?.ministery}
-              onChange={handleChange}
-              required
-            />
-          </>
-
-          <Button type="submit">Cadastrar</Button>
+          <Input
+            type="email"
+            placeholder="Email"
+            name="email"
+            value={formData?.email}
+            onChange={handleChange}
+            required
+          />
+          <Input
+            type="password"
+            placeholder="Senha"
+            name="password"
+            value={formData.password}
+            onChange={handleChange}
+            required
+          />
+          <Button type="submit">Entrar</Button>
         </Form>
-
         <SwitchText>
-          Já tem uma conta?{" "}
-          <SwitchLink onClick={() => router.push("/login")}>Entrar</SwitchLink>
-        </SwitchText>
+          Não tem uma conta?{" "}
+          <SwitchLink onClick={() => router.push("/register")}>
+            Cadastre-se
+          </SwitchLink>
+        </SwitchText>{" "}
       </Card>
     </Container>
   );

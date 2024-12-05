@@ -1,21 +1,21 @@
-import React, { useEffect, useState } from 'react';
-import Footer from '../components/Footer';
-import UserManagement from '../components/userManagement';
+import React, { useEffect, useState } from "react";
+import Footer from "src/components/Footer";
+import UserManagement from "src/components/userManagement";
+import { User } from "src/entities";
 // import { Content } from '../home/styles';
-import { User } from '../types';
 
 const Home: React.FC = () => {
   const [users, setUsers] = useState<User[]>([]);
   const fetchUsers = async () => {
     try {
-      const response = await fetch('/api/v1/user');
+      const response = await fetch("/api/v1/user");
       if (!response.ok) {
-        throw new Error('Network response was not ok');
+        throw new Error("Network response was not ok");
       }
       const data: User[] = await response.json();
       setUsers(data);
     } catch (error) {
-      console.error('Failed to fetch users:', error);
+      console.error("Failed to fetch users:", error);
     }
   };
 
@@ -28,13 +28,11 @@ const Home: React.FC = () => {
     <>
       {/* <Header /> */}
       {/* <Content> */}
-        <UserManagement  initialUsers={users} />
+      <UserManagement initialUsers={users} />
       {/* </Content> */}
       <Footer />
-
     </>
   );
 };
 
 export default Home;
-

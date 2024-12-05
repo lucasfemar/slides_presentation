@@ -2,7 +2,7 @@
 import React from 'react';  
 import { FooterContainer } from './styles';  
 import { Logo } from './styles';
-import logoIbpv from '../../public/logo ibpv branco.png'
+import logoIbpv from 'src/public/logo ibpv branco.png'
 
 const Footer: React.FC = () => {
   return (
