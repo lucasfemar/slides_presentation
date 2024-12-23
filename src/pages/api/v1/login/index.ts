@@ -1,11 +1,11 @@
 import prisma from "@/lib/prisma";
-import { NextApiRequest, NextApiResponse } from "next";
-import { z } from "zod";
 import bcrypt from "bcrypt";
+import { NextApiRequest } from "next";
+import { z } from "zod";
 
 export default async function login(
   request: NextApiRequest,
-  response: NextApiResponse,
+  // response: NextApiResponse,
 ) {
   const { body } = request;
   const loginSchema = z.object({
