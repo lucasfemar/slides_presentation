@@ -4,15 +4,15 @@ import { z } from "zod";
 import bcrypt from "bcrypt";
 
 interface IApiService {
-  GET: (request?: NextApiRequest) => Promise<any>;
-  POST: (request: NextApiRequest) => Promise<any>;
+  GET: (request?: NextApiRequest) => Promise<{ result: any; status: number }>;
+  POST: (request: NextApiRequest) => Promise<{ result: any; status: number }>;
 }
 
 const apiService: IApiService = {
   GET: async () => {
     try {
       const users = await prisma.user.findMany();
-      return users;
+      return { result: users, status: 200 };
     } catch (error) {
       if (error instanceof Error) {
         throw new Error(`Falha ao buscar usuários: ${error.message}`);
@@ -46,10 +46,10 @@ const apiService: IApiService = {
       }
       user.password = bcrypt.hashSync(user.password, 10);
       const createdUser = await prisma.user.create({ data: user });
-      return createdUser;
+      return { result: createdUser, status: 201 };
     } catch (error) {
       throw new Error(
-        `Fala para criar usuário: ${error instanceof Error ? error.message : "Unknown error"}`,
+        `Falha ao criar usuário: ${error instanceof Error ? error.message : "Unknown error"}`,
       );
     }
   },
@@ -67,8 +67,8 @@ async function handleRequest(
   }
 
   try {
-    const result = await apiService[method](request);
-    return response.status(200).json(result);
+    const { result, status } = await apiService[method](request);
+    return response.status(status).json(result);
   } catch (error) {
     if (error instanceof Error) {
       return response.status(500).json({ error: error.message });

@@ -4,11 +4,12 @@ import { NextApiRequest, NextApiResponse } from "next";
 
 async function status(request: NextApiRequest, response: NextApiResponse) {
   const updatedAt = new Date().toISOString(); //Retorna a data no padrão ISO8601
-  const databaseVersionResult: any =
-    await prisma.$queryRaw`SHOW server_version;`;
+  const databaseVersionResult: any = await prisma.$queryRaw(
+    Prisma.sql`SHOW server_version;`,
+  );
   const databaseVersionValue = databaseVersionResult[0].server_version;
   const databaseMaxConnectionsResult: any =
-    await prisma.$queryRaw`SHOW max_connections;`;
+    await prisma.$queryRaw(Prisma.sql`SHOW max_connections;`);
   const databaseMaxConnectionsValue =
     databaseMaxConnectionsResult[0].max_connections;
   const databaseName = process.env.POSTGRES_DB;

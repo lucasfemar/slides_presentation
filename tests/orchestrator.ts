@@ -1,5 +1,7 @@
 import retry from "async-retry";
-import prisma from "@/lib/prisma";
+import prisma from "lib/prisma";
+import { exec } from "node:child_process"; // Função do node que executa scripts pelo código
+
 async function waitForAllServices() {
   await waitForWebServer();
 
@@ -19,11 +21,18 @@ async function waitForAllServices() {
 }
 
 async function clearDatabase() {
-  await prisma.$queryRaw`drop schema public cascade; create schema public;`;
+  await exec("dotenv -e .env.development -- npx prisma db push --force-reset", () => {
+    console.log("teste");
+  });
+}
+
+async function clearTable(table: string) {
+  await prisma.$queryRawUnsafe(`TRUNCATE TABLE ${table};`);
 }
 
 const orchestrator = {
   waitForAllServices,
   clearDatabase,
+  clearTable,
 };
 export default orchestrator;
