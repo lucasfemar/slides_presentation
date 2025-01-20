@@ -20,19 +20,12 @@ async function waitForAllServices() {
   }
 }
 
-async function clearDatabase() {
-  await exec("dotenv -e .env.development -- npx prisma db push --force-reset", () => {
-    console.log("teste");
-  });
-}
-
 async function clearTable(table: string) {
   await prisma.$queryRawUnsafe(`TRUNCATE TABLE ${table};`);
 }
 
 const orchestrator = {
   waitForAllServices,
-  clearDatabase,
   clearTable,
 };
 export default orchestrator;
