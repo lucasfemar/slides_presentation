@@ -14,36 +14,51 @@ export default async function login(
     password: z.string(),
   });
   const { email, password } = loginSchema.parse(body);
-  const userExists = await prisma.user.findUnique({
+  const userExists = await prisma.users.findUnique({
     where: {
       email,
     },
   });
   if (!userExists) {
-    throw new Error("Invalid credentials please try again!");
+    return response
+      .status(401)
+      .json({ message: "Invalid credentials please try again!" });
   }
 
   const isValidPassword = await bcrypt.compare(password, userExists.password);
 
   if (!isValidPassword) {
-    throw new Error("Invalid credentials please try again!");
+    return response
+      .status(401)
+      .json({ message: "Invalid credentials please try again!" });
   }
-
+  // divide by 1000 to get the velue in second since JS crete it in millisecondes
+  // Use math.floor() to remove decimals
+  const sessionId = crypto.randomUUID();
+  const expirationTime =
+    Math.floor(new Date().getTime() / 1000) + 7 * 24 * 60 * 60;
   const token = jwt.sign(
     {
       email: userExists.email,
       name: userExists.name,
+      sessionId,
     },
     `${process.env.USERTOKEN}`,
     {
       subject: userExists.id,
-      expiresIn: "7d",
+      expiresIn: 7 * 24 * 60 * 60, // alredy in seconds
     },
   );
-  response.setHeader(
-    "Set-Cookie",
-    `auth=${token}; Path=/; HttpOnly; SameSite=Lax; Max-Age=604800`,
-  );
+  await prisma.userSessions.create({
+    data: {
+      userId: userExists.id,
+      sessionId,
+      token,
+      expirationTimestamp: expirationTime,
+      status: true,
+    },
+  });
+  response.setHeader("Set-Cookie", `auth=${token}`);
   return response.status(200).json({
     message: "User authenticated successfully!",
   });

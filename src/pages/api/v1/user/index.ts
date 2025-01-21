@@ -11,7 +11,7 @@ interface IApiService {
 const apiService: IApiService = {
   GET: async () => {
     try {
-      const users = await prisma.user.findMany();
+      const users = await prisma.users.findMany();
       return { result: users, status: 200 };
     } catch (error) {
       if (error instanceof Error) {
@@ -37,7 +37,7 @@ const apiService: IApiService = {
 
       const user = userSchema.parse(request.body);
 
-      const emailExists = await prisma.user.findUnique({
+      const emailExists = await prisma.users.findUnique({
         where: { email: user.email },
       });
 
@@ -45,7 +45,7 @@ const apiService: IApiService = {
         throw new Error("Este email já existe");
       }
       user.password = bcrypt.hashSync(user.password, 10);
-      const createdUser = await prisma.user.create({ data: user });
+      const createdUser = await prisma.users.create({ data: user });
       return { result: createdUser, status: 201 };
     } catch (error) {
       throw new Error(
