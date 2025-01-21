@@ -21,7 +21,7 @@ async function waitForAllServices() {
 }
 
 async function clearTable(table: string) {
-  await prisma.$queryRawUnsafe(`TRUNCATE TABLE ${table};`);
+  await prisma.$queryRawUnsafe(`TRUNCATE TABLE ${table} CASCADE;`);
 }
 
 const orchestrator = {

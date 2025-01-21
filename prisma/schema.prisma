@@ -13,16 +13,25 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model User {
-  id           String   @id @default(cuid())
+model users {
+  id           String         @id @default(cuid())
   name         String
-  email        String   @unique
+  email        String         @unique
   ministery    String
   password     String
   phone        String
   status       Boolean
-  created_date DateTime @default(now()) @map(name: "data_criacao")
-  update_date  DateTime @updatedAt @map(name: "data_atualizacao")
+  userSessions userSessions[]
+  created_date DateTime       @default(now()) @map(name: "data_criacao")
+  update_date  DateTime       @updatedAt @map(name: "data_atualizacao")
+}
 
-  @@map(name: "users")
+model userSessions {
+  id                  String  @id @default(cuid())
+  sessionId           String
+  token               String
+  expirationTimestamp Int
+  status              Boolean
+  user                users   @relation(fields: [userId], references: [id])
+  userId              String
 }
