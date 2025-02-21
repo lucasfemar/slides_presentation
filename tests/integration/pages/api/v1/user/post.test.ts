@@ -23,7 +23,12 @@ describe("POST /api/v1/user", () => {
         }),
       });
       const responseBody = await response.json();
-      expect(response.status).toBe(201);
+      expect(responseBody).toEqual({
+        name: "AuthenticationError",
+        message: "Falha ao autenticar o usuário.",
+        action: "Verifique se o token de sessão é valido.",
+        status_code: 403,
+      });
     });
   });
 });

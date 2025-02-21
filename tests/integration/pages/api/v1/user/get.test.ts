@@ -27,8 +27,12 @@ describe("GET /api/v1/user", () => {
     test("Retrievinhg list of users", async () => {
       const response = await fetch("http://localhost:3000/api/v1/user");
       const responseBody = await response.json();
-      expect(responseBody.length).toBe(5);
-      expect(responseBody[0].name).toBe("Test User 1");
+      expect(responseBody).toEqual({
+        name: "AuthenticationError",
+        message: "Falha ao autenticar o usuário.",
+        action: "Verifique se o token de sessão é valido.",
+        status_code: 403,
+      });
     });
   });
 });

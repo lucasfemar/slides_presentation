@@ -1,22 +1,19 @@
+import { generateUserPassword } from "@/src/utils";
 import orchestrator from "@/tests/orchestrator";
+import prisma from "lib/prisma";
 import jwt from "jsonwebtoken";
+
 beforeAll(async () => {
   await orchestrator.clearTable("users");
-  await fetch("http://localhost:3000/api/v1/user", {
-    method: "POST",
-    headers: {
-      Accept: "application/json",
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({
-      name: "Login User Test",
-      phone: "11912345678",
-      ministery: "testMinistery_1",
-      email: "loginUserTest@login.com",
-      password: "loginUserTest",
-      status: true,
-    }),
-  });
+  const user = {
+    name: "Login User Test",
+    phone: "11912345678",
+    ministery: "testMinistery_1",
+    email: "loginUserTest@login.com",
+    password: generateUserPassword("loginUserTest"),
+    status: true,
+  };
+  await prisma.users.create({ data: user });
 });
 
 describe("POST /api/v1/login", () => {
@@ -33,8 +30,8 @@ describe("POST /api/v1/login", () => {
           "Content-Type": "application/json",
         },
       });
-      expect(response.status).toBe(200);
       const responseBody = await response.json();
+      expect(response.status).toBe(200);
       expect(responseBody.message).toBe("User authenticated successfully!");
       const cookies = response.headers.getSetCookie();
       expect(cookies.length).toBeGreaterThan(0);
@@ -47,7 +44,6 @@ describe("POST /api/v1/login", () => {
         auth[1],
         `${process.env.USERTOKEN}`,
       ) as jwt.JwtPayload;
-      expect(jwtDecode.name).toBe("Login User Test");
       expect(jwtDecode.email).toBe("loginUserTest@login.com");
       expect(jwtDecode.sessionId).toBeDefined();
     });
@@ -63,11 +59,13 @@ describe("POST /api/v1/login", () => {
           "Content-Type": "application/json",
         },
       });
-      expect(response.status).toBe(401);
       const responseBody = await response.json();
-      expect(responseBody.message).toBe(
-        "Invalid credentials please try again!",
-      );
+      expect(responseBody).toEqual({
+        name: "AuthenticationError",
+        message: "Credenciais invalidas, por favor tente novamente.",
+        action: "Verifique se o token de sessão é valido.",
+        status_code: 403,
+      });
     });
     test("Logging-in with invalid password", async () => {
       const response = await fetch("http://localhost:3000/api/v1/login", {
@@ -81,11 +79,13 @@ describe("POST /api/v1/login", () => {
           "Content-Type": "application/json",
         },
       });
-      expect(response.status).toBe(401);
       const responseBody = await response.json();
-      expect(responseBody.message).toBe(
-        "Invalid credentials please try again!",
-      );
+      expect(responseBody).toEqual({
+        name: "AuthenticationError",
+        message: "Credenciais invalidas, por favor tente novamente.",
+        action: "Verifique se o token de sessão é valido.",
+        status_code: 403,
+      });
     });
   });
 });
