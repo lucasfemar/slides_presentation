@@ -2,7 +2,7 @@ import axios from "axios";
 import { useState } from "react";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import logoIbpv from "src/public/logo-ibpv.png";
+import logoIbpv from "public/images/logos/logo-ibpv.png";
 import {
   Button,
   Card,

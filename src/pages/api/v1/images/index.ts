@@ -7,7 +7,7 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
     const cwd = process.cwd();
     console.log('Current working directory:', cwd);
     
-    const imagesDirectory = path.join(cwd, 'public', 'imagens');
+    const imagesDirectory = path.join(cwd, 'public', 'images');
     
     if (!fs.existsSync(imagesDirectory)) {
       console.error('Diretório de imagens não encontrado:', imagesDirectory);
@@ -34,7 +34,7 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
       .filter(file => validExtensions.test(file))
       .map(fileName => {
         // Garantir que o caminho da imagem comece com /
-        const imagePath = `/imagens/${fileName}`.replace(/\\/g, '/');
+        const imagePath = `/images/${fileName}`.replace(/\\/g, '/');
         return {
           src: imagePath,
           alt: fileName.split('.')[0].replace(/_/g, ' ')
