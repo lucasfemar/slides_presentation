@@ -4,6 +4,7 @@ import styled from 'styled-components';
 import Slider from 'react-slick';
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
+import { SlideFooter } from '../../components/slidefooter';
 
 interface ImageType {
   src: string;
@@ -14,7 +15,7 @@ const SlideContainer = styled.div`
   width: 100vw;
   height: 100vh;
   margin: 0;
-  padding: 0;
+  padding: 0 0 35px 0;
   position: relative;
   display: flex;
   align-items: center;
@@ -27,6 +28,7 @@ const StyledSlider = styled(Slider)`
   position: relative;
   left: 50%;
   transform: translateX(-50%);
+  margin-bottom: 10px;
   
   .slick-list {
     overflow: visible;
@@ -186,6 +188,7 @@ export default function SlideShow() {
           </div>
         ))}
       </StyledSlider>
+      <SlideFooter />
     </SlideContainer>
   );
 } 
