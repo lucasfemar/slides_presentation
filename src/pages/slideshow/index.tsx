@@ -70,7 +70,7 @@ const StyledSlider = styled(Slider)`
     
     &:before {
       font-size: 50px;
-      opacity: 0.8;
+      opacity: 0.05;
     }
   }
 
