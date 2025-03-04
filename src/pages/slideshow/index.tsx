@@ -21,6 +21,10 @@ const SlideContainer = styled.div`
   align-items: center;
   justify-content: center;
   background: #000;
+
+  @media (orientation: portrait) {
+    padding: 0;
+  }
 `;
 
 const StyledSlider = styled(Slider)`
@@ -61,6 +65,21 @@ const StyledSlider = styled(Slider)`
         margin-left: -25%;
       }
     }
+
+    @media (orientation: portrait) {
+      transform: scale(1);
+      opacity: 1;
+      
+      &.slick-current {
+        transform: scale(1);
+      }
+      
+      &.slick-active {
+        &:first-child {
+          margin-left: 0;
+        }
+      }
+    }
   }
 
   .slick-prev, .slick-next {
@@ -71,6 +90,10 @@ const StyledSlider = styled(Slider)`
     &:before {
       font-size: 50px;
       opacity: 0.05;
+    }
+
+    @media (orientation: portrait) {
+      display: none !important;
     }
   }
 
@@ -84,10 +107,17 @@ const StyledSlider = styled(Slider)`
 
   .slick-dots {
     bottom: 20px;
+    z-index: 20;
     
     li button:before {
       font-size: 12px;
       color: white;
+    }
+  }
+
+  @media (orientation: portrait) {
+    .slick-list {
+      overflow: hidden;
     }
   }
 `;
@@ -103,15 +133,24 @@ const SlideImage = styled.div<{ src: string }>`
   position: relative;
   left: 50%;
   transform: translateX(-50%);
+  image-rendering: -webkit-optimize-contrast;
+  image-rendering: crisp-edges;
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
 
   @media (max-width: 1024px) {
     width: 85vw;
     height: 80vh;
   }
 
-  @media (max-width: 768px) {
-    width: 98vw;
-    height: 70vh;
+  @media (orientation: portrait) {
+    width: 100vw;
+    height: 100vh;
+    background-size: contain;
+    margin: 0;
+    padding: 0;
+    left: 0;
+    transform: none;
   }
 `;
 
@@ -119,6 +158,36 @@ export default function SlideShow() {
   const [images, setImages] = useState<ImageType[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [isPortrait, setIsPortrait] = useState(false);
+  const sliderRef = React.useRef<Slider>(null);
+
+  useEffect(() => {
+    const checkOrientation = () => {
+      setIsPortrait(window.matchMedia("(orientation: portrait)").matches);
+    };
+
+    const handleFullScreenChange = () => {
+      // Reinicia o autoplay quando mudar o modo de tela
+      if (sliderRef.current) {
+        sliderRef.current.slickPlay();
+      }
+    };
+
+    checkOrientation();
+    window.addEventListener('resize', checkOrientation);
+    document.addEventListener('fullscreenchange', handleFullScreenChange);
+    document.addEventListener('webkitfullscreenchange', handleFullScreenChange);
+    document.addEventListener('mozfullscreenchange', handleFullScreenChange);
+    document.addEventListener('MSFullscreenChange', handleFullScreenChange);
+
+    return () => {
+      window.removeEventListener('resize', checkOrientation);
+      document.removeEventListener('fullscreenchange', handleFullScreenChange);
+      document.removeEventListener('webkitfullscreenchange', handleFullScreenChange);
+      document.removeEventListener('mozfullscreenchange', handleFullScreenChange);
+      document.removeEventListener('MSFullscreenChange', handleFullScreenChange);
+    };
+  }, []);
 
   useEffect(() => {
     async function loadImages() {
@@ -141,12 +210,12 @@ export default function SlideShow() {
   }, []);
 
   const settings: Settings = {
-    dots: true,
+    dots: !isPortrait,
     infinite: true,
     speed: 500,
-    slidesToShow: 3,
+    slidesToShow: isPortrait ? 1 : 3,
     slidesToScroll: 1,
-    centerMode: true,
+    centerMode: !isPortrait,
     centerPadding: '0',
     autoplay: true,
     autoplaySpeed: 3000,
@@ -158,6 +227,8 @@ export default function SlideShow() {
           slidesToShow: 1,
           slidesToScroll: 1,
           centerPadding: '0',
+          centerMode: false,
+          dots: !isPortrait
         }
       }
     ]
@@ -181,7 +252,7 @@ export default function SlideShow() {
 
   return (
     <SlideContainer>
-      <StyledSlider {...settings}>
+      <StyledSlider ref={sliderRef} {...settings}>
         {images.map((image, index) => (
           <div key={index}>
             <SlideImage src={image.src} />
