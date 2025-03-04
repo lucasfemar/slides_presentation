@@ -1,4 +1,4 @@
-export const theme = {
+export const Theme = {
     colors: {
         background: '#f7f7f7',
         cardBackground: 'white',

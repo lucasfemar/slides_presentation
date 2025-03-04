@@ -13,7 +13,7 @@ import {
   SwitchLink,
   SwitchText,
   Title,
-} from "./styles";
+} from "@/src/styled/LoginStyle";
 import { useRouter } from "next/router";
 
 export default function Login() {

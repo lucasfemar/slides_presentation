@@ -78,6 +78,7 @@ const UserTable: React.FC<UserTableProps> = ({ users, onResetPassword }) => {
       phone: "",
       ministery: "",
       status: false,
+      password: "",
     });
     setIsEditMode(false);
     setOpenModal(true);
