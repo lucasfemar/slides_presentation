@@ -5,17 +5,18 @@ interface IBodyError {
 interface IConstructor {
   message?: string;
   cause?: unknown;
+  statusCode?: number;
 }
 export class InternalServerError extends Error implements IBodyError {
   action: string;
   statusCode: number;
-  constructor({ cause }: IConstructor) {
+  constructor({ cause, statusCode }: IConstructor) {
     super("Um erro interno não esperado aconteceu.", {
       cause,
     });
     this.name = "InternalServerError";
     this.action = "Entre em contato com o suporte.";
-    this.statusCode = 500;
+    this.statusCode = statusCode || 500;
   }
 
   toJSON() {
@@ -65,6 +66,29 @@ export class AuthenticationError extends Error implements IBodyError {
     return {
       name: this.name,
       message: this.message,
+      action: this.action,
+      status_code: this.statusCode,
+    };
+  }
+}
+
+export class ValidationErrors extends Error implements IBodyError {
+  action: string;
+  statusCode: number;
+  constructor({ message, cause }: IConstructor = {}) {
+
+    super(message || "Erro de validação.", {
+      cause: cause,
+    });
+    this.name = "ValidationErrors";
+    this.action = "Verifique os parâmetros de entrada.";
+    this.statusCode = 400;
+  }
+  toJSON() {
+    const details = this.message.split(";");
+    return {
+      name: this.name,
+      message: details,
       action: this.action,
       status_code: this.statusCode,
     };

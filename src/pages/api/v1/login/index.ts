@@ -1,39 +1,17 @@
+import controller from "@/infra/controller";
+import { AuthenticationError } from "@/infra/errors";
 import prisma from "@/lib/prisma";
 import bcrypt from "bcrypt";
-import { NextApiRequest, NextApiResponse } from "next";
-import { z } from "zod";
 import jwt from "jsonwebtoken";
-import {
-  AuthenticationError,
-  InternalServerError,
-  MethodNotAllowedError,
-} from "@/infra/errors";
+import { NextApiRequest, NextApiResponse } from "next";
 import { createRouter } from "next-connect";
+import { z } from "zod";
 
 const router = createRouter<NextApiRequest, NextApiResponse>();
 
 router.post(postHandler);
 
-export default router.handler({
-  onNoMatch: onNoMachHandler,
-  onError: onErrorHandler,
-});
-
-function onErrorHandler(
-  error: any,
-  request: NextApiRequest,
-  response: NextApiResponse,
-) {
-  const publicErrorObject = new InternalServerError({
-    cause: error,
-  });
-  response.status(publicErrorObject.statusCode).json(publicErrorObject);
-}
-
-function onNoMachHandler(request: NextApiRequest, response: NextApiResponse) {
-  const publicErrorObject = new MethodNotAllowedError();
-  return response.status(publicErrorObject.statusCode).json(publicErrorObject);
-}
+export default router.handler(controller.errorsHandler);
 
 async function postHandler(request: NextApiRequest, response: NextApiResponse) {
   const { body } = request;
