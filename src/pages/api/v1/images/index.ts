@@ -1,61 +1,60 @@
-import { NextApiRequest, NextApiResponse } from 'next';
-import fs from 'fs';
-import path from 'path';
+import { NextApiRequest, NextApiResponse } from "next";
+import { createRouter } from "next-connect";
+import multer, { FileFilterCallback } from "multer";
+import controller from "@/infra/controller";
+import { ValidationErrors } from "@/infra/errors";
 
-export default function handler(req: NextApiRequest, res: NextApiResponse) {
-  try {
-    const cwd = process.cwd();
-    console.log('Current working directory:', cwd);
-    
-    const imagesDirectory = path.join(cwd, 'public', 'images');
-    
-    if (!fs.existsSync(imagesDirectory)) {
-      console.error('Diretório de imagens não encontrado:', imagesDirectory);
-      return res.status(404).json({ 
-        error: 'Diretório de imagens não encontrado',
-        directory: imagesDirectory
-      });
+// Configurar multer com storage em memória e validação de tipo/size
+const upload = multer({
+  storage: multer.memoryStorage(),
+  limits: { fileSize: 5 * 1024 * 1024 }, // 5MB
+  fileFilter: (req: NextApiRequest, file: Express.Multer.File, cb: FileFilterCallback) => {
+    if (file.mimetype === "image/png" || file.mimetype === "image/jpeg") {
+      cb(null, true);
+    } else {
+      cb(new ValidationErrors({ message: "Apenas arquivos PNG e JPEG são permitidos." }));
     }
+  },
+});
 
-    console.log('Diretório de imagens encontrado:', imagesDirectory);
-    
-    const fileNames = fs.readdirSync(imagesDirectory);
-    console.log('Arquivos encontrados:', fileNames);
+interface MulterNextApiRequest extends NextApiRequest {
+  file?: Express.Multer.File;
+}
 
-    if (fileNames.length === 0) {
-      return res.status(404).json({ 
-        error: 'Nenhuma imagem encontrada no diretório',
-        directory: imagesDirectory
-      });
-    }
+const router = createRouter<MulterNextApiRequest, NextApiResponse>();
 
-    const validExtensions = /\.(jpg|jpeg|png|gif|svg)$/i;
-    const images = fileNames
-      .filter(file => validExtensions.test(file))
-      .map(fileName => {
-        // Garantir que o caminho da imagem comece com /
-        const imagePath = `/images/${fileName}`.replace(/\\/g, '/');
-        return {
-          src: imagePath,
-          alt: fileName.split('.')[0].replace(/_/g, ' ')
-        };
-      });
-    
-    console.log('Imagens processadas:', images);
+// Desliga body parser padrão para permitir multer processar multipart
+export const config = {
+  api: {
+    bodyParser: false,
+  },
+};
 
-    if (images.length === 0) {
-      return res.status(404).json({ 
-        error: 'Nenhum arquivo de imagem válido encontrado',
-        foundFiles: fileNames
-      });
-    }
+// Middleware multer para receber um arquivo no campo "image"
+router.use(upload.single("image"));
 
-    res.status(200).json(images);
-  } catch (error: any) {
-    console.error('Erro ao ler diretório de imagens:', error);
-    res.status(500).json({ 
-      error: 'Falha ao carregar imagens', 
-      details: error?.message || 'Erro desconhecido'
-    });
+router.post(async (req, res) => {
+  if (!req.file) {
+    const error = new ValidationErrors({ message: "Nenhuma imagem enviada." });
+    return res.status(error.statusCode).json(error.toJSON());
   }
-} 
+
+  const { originalname, mimetype, size, buffer } = req.file;
+
+  // Converter buffer para base64
+  const base64 = buffer.toString("base64");
+  const base64Prefix = `data:${mimetype};base64,`;
+
+  // Aqui você pode salvar no banco, armazenar no sistema de arquivos, etc.
+  // Exemplo: retornar dados básicos da imagem e o base64
+  return res.status(200).json({
+    message: "Imagem recebida com sucesso",
+    originalname,
+    mimetype,
+    size,
+    base64Prefix,
+    base64,
+  });
+});
+
+export default router.handler(controller.errorsHandler);
