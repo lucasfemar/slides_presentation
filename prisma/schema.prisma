@@ -1,0 +1,78 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id           String        @id @default(cuid())
+  name         String
+  email        String        @unique
+  ministery    String
+  password     String
+  phone        String
+  status       Boolean
+  created_at   DateTime      @default(now())
+  updated_at   DateTime      @default(now())
+  userSessions UserSession[]
+  Images       Image[]
+  SlideConfig  SlideConfig[]
+}
+
+model UserSession {
+  id                  String   @id @default(cuid())
+  sessionId           String
+  token               String
+  expirationTimestamp Int
+  status              Boolean
+  userId              String
+  updated_at          DateTime @default(now())
+  created_at          DateTime @default(now())
+  user                User     @relation(fields: [userId], references: [id])
+}
+
+model Image {
+  id               String             @id @default(cuid())
+  title            String
+  blob             String
+  userId           String
+  expire_at        DateTime
+  updated_at       DateTime           @default(now())
+  created_at       DateTime           @default(now())
+  user             User               @relation(fields: [userId], references: [id])
+  SlideConfigImage SlideConfigImage[]
+}
+
+model SlideConfig {
+  id         String   @id @default(cuid())
+  name       String
+  active     Boolean  @default(false)
+  duration   Int
+  userId     String
+  created_at DateTime @default(now())
+  updated_at DateTime @default(now())
+
+  user   User               @relation(fields: [userId], references: [id])
+  slides SlideConfigImage[]
+}
+
+model SlideConfigImage {
+  id            String @id @default(cuid())
+  slideConfigId String
+  imageId       String
+  position      Int
+
+  slideConfig SlideConfig @relation(fields: [slideConfigId], references: [id])
+  image       Image       @relation(fields: [imageId], references: [id])
+
+  @@unique([slideConfigId, position]) // evita imagens duplicadas na mesma posição
+}
