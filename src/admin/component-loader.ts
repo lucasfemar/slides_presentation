@@ -2,4 +2,8 @@ import { ComponentLoader } from 'adminjs';
 
 const componentLoader = new ComponentLoader();
 
-export default componentLoader;
+const components = {
+  ImagePreview: componentLoader.add('ImagePreview', '../components/ImagePreview.tsx'),
+};
+
+export { componentLoader, components };

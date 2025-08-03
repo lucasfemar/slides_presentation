@@ -1,18 +1,20 @@
 import { PrismaClient } from '@prisma/client';
 import { ResourceWithOptions } from 'adminjs';
 
-import User from './User.ts';
-import UserSession from './UserSession.ts';
-import Image from './Image.ts';
-import SlideConfig from './SlideConfig.ts';
-import SlideConfigImage from './SlideConfigImage.ts';
+import ministry from './ministry.ts';
+import slideConfig from './slideConfig.ts';
+import slideConfigImage from './slideConfigImage.ts';
+import user from './user.ts';
+import userSession from './userSession.ts';
+import image from './image.ts';
 
 const Resources = (prisma: PrismaClient): ResourceWithOptions[] => [
-  User(prisma),
-  UserSession(prisma),
-  Image(prisma),
-  SlideConfig(prisma),
-  SlideConfigImage(prisma),
+  user(prisma),
+  userSession(prisma),
+  ministry(prisma),
+  image(prisma),
+  slideConfig(prisma),
+  slideConfigImage(prisma),
 ];
 
 export default Resources;

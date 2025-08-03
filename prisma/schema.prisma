@@ -14,18 +14,15 @@ datasource db {
 }
 
 model User {
-  id           String        @id @default(cuid())
-  name         String
-  email        String        @unique
-  ministery    String
-  password     String
-  phone        String
-  status       Boolean
-  created_at   DateTime      @default(now())
-  updated_at   DateTime      @default(now())
-  userSessions UserSession[]
-  Images       Image[]
-  SlideConfig  SlideConfig[]
+  id         String   @id @default(cuid())
+  name       String
+  email      String   @unique
+  password   String
+  phone      String
+  status     Boolean
+  ministryId String?
+  created_at DateTime @default(now())
+  updated_at DateTime @default(now())
 }
 
 model UserSession {
@@ -37,19 +34,26 @@ model UserSession {
   userId              String
   updated_at          DateTime @default(now())
   created_at          DateTime @default(now())
-  user                User     @relation(fields: [userId], references: [id])
+}
+
+model Ministry {
+  id         String   @id @default(cuid())
+  title      String
+  updated_at DateTime @default(now())
+  created_at DateTime @default(now())
 }
 
 model Image {
-  id               String             @id @default(cuid())
-  title            String
-  blob             String
-  userId           String
-  expire_at        DateTime
-  updated_at       DateTime           @default(now())
-  created_at       DateTime           @default(now())
-  user             User               @relation(fields: [userId], references: [id])
-  SlideConfigImage SlideConfigImage[]
+  id         String   @id @default(cuid())
+  title      String
+  key        String?
+  bucket     String?
+  mime       String?
+  userId     String?
+  ministryId String?  @map("ministryId")
+  expire_at  DateTime
+  updated_at DateTime @default(now())
+  created_at DateTime @default(now())
 }
 
 model SlideConfig {
@@ -60,19 +64,13 @@ model SlideConfig {
   userId     String
   created_at DateTime @default(now())
   updated_at DateTime @default(now())
-
-  user   User               @relation(fields: [userId], references: [id])
-  slides SlideConfigImage[]
 }
 
 model SlideConfigImage {
   id            String @id @default(cuid())
-  slideConfigId String
   imageId       String
+  slideConfigId String
   position      Int
-
-  slideConfig SlideConfig @relation(fields: [slideConfigId], references: [id])
-  image       Image       @relation(fields: [imageId], references: [id])
 
   @@unique([slideConfigId, position]) // evita imagens duplicadas na mesma posição
 }
